@@ -4,7 +4,20 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { nanoid } from 'nanoid';
 
 // Initial state
-const initialState = [
+export const getLocalStorage = () => {
+  try {
+    const serializedContacts = localStorage.getItem('contacts');
+    if (serializedContacts === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedContacts);
+  } catch (error) {
+    console.error('Error getting contacts from local storage:', error);
+    return undefined;
+  }
+};
+
+const initialState = getLocalStorage() || [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
   { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
@@ -14,6 +27,16 @@ const initialState = [
 // Actions
 export const addContact = createAction('contact/add');
 export const deleteContact = createAction('contact/delete');
+export const updateLocalStorage = (contacts) => {
+  try {
+    const serializedContacts = JSON.stringify(contacts);
+    localStorage.setItem('contacts', serializedContacts);
+  } catch (error) {
+    console.error('Error saving contacts to local storage:', error);
+  }
+};
+
+
 
 // Reducer
 const contactReducer = createReducer(initialState, (builder) => {

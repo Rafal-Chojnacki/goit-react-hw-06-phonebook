@@ -1,8 +1,9 @@
 // components/addContact.js
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import css from './addContact.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact } from '../redux/contactSlice';
+import { addContact, deleteContact, updateLocalStorage } from '../redux/contactSlice';
+
 import ContactForm from 'components/contactForm';
 import ContactList from 'components/contactList';
 
@@ -11,7 +12,7 @@ const AddContact = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    updateLocalStorage(contacts);
   }, [contacts]);
 
   const handleAddContact = (newContact) => {
